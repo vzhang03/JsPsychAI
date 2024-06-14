@@ -6,7 +6,7 @@ interface ExperimentComponentProps {
   scriptString: string,
 }
 
-const ExperimentComponent: React.FC<ExperimentComponentProps> = ({scriptString}) => {
+const RunExperimentComponent: React.FC<ExperimentComponentProps> = ({scriptString}) => {
   useEffect(() => {
     const script_fun = new Function(scriptString); 
     script_fun();
@@ -17,4 +17,4 @@ const ExperimentComponent: React.FC<ExperimentComponentProps> = ({scriptString})
   );
 };
 
-export default ExperimentComponent;
+export default RunExperimentComponent;

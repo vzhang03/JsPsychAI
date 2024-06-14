@@ -1,5 +1,5 @@
-import ExperimentComponent from "./ExperimentComponent"
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import RunExperimentComponent from "./components/RunExperimentComponent";
 
 const defaultScriptString = `
   let jsPsych = initJsPsych({
@@ -16,31 +16,67 @@ const defaultScriptString = `
   jsPsych.run([trial]);
 `;
 
-export default function ExperimentWindow(){
-  const [runExperiment, setRunExperiment] = useState(false);
-  const [scriptString, setScriptString] = useState<string>(defaultScriptString); // Explicitly set type to string
+interface ExperimentWindowProps {
+  code: any;
+}
+
+const ExperimentWindow: React.FC<ExperimentWindowProps> = ( {code} ) => {
+  const [runExperiment, setRunExperiment] = useState(false); // code when running experiment
+  const [scriptString, setScriptString] = useState<string>(defaultScriptString); // code when setting script screen
+  const [codeChunks, setCodeChunks] = useState<string[]>([defaultScriptString]);
+  const [selectedChunkIndex, setSelectedChunkIndex] = useState<number>(0); // Track the selected code chunk
+
+  useEffect(() => {
+    if (code) {
+      setScriptString(code);
+      setCodeChunks(prevChunks => [...prevChunks, code]);
+      setSelectedChunkIndex(codeChunks.length); // Set the selected chunk index to the new chunk
+    }
+  }, [code]);
 
   const handleButtonClick = () => {
     setRunExperiment(true);
   };
 
   const handleScriptChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setScriptString(event.target.value);
+    const newScriptString = event.target.value;
+    setScriptString(newScriptString);
+    setCodeChunks(prevChunks => {
+      const newChunks = [...prevChunks];
+      newChunks[selectedChunkIndex] = newScriptString;
+      return newChunks;
+    });
+  };
+
+  const handleCodeChunkClick = (index: number) => {
+    setScriptString(codeChunks[index]);
+    setSelectedChunkIndex(index);
   };
 
   return (
-    <div className='ExperimentWindow'>
+    <div className="ExperimentWindow">
+      <div>
+        {codeChunks.map((_, index) => (
+          <button key={index} onClick={() => handleCodeChunkClick(index)}>
+            {`Experiment ${index + 1}`}
+          </button>
+        ))}
+      </div>
       <div>
         <textarea
-            className='script'
-            value={scriptString}
-            onChange={handleScriptChange}
-            rows={20} // Adjust the number of rows as needed
-            cols={60} // Adjust the number of columns as needed
-          />        
+          className="script"
+          value={scriptString}
+          onChange={handleScriptChange}
+          rows={20}
+          cols={60}
+        />
         <button onClick={handleButtonClick}>Start Experiment</button>
       </div>
-      {runExperiment && <ExperimentComponent scriptString={scriptString} />}
-    </ div>
-  )
-}
+      {runExperiment && (
+        <RunExperimentComponent scriptString={scriptString} />
+      )}
+    </div>
+  );
+};
+
+export default ExperimentWindow;

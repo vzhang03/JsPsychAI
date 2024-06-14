@@ -26,6 +26,7 @@
 }
 
 .ExperimentWindow {
+  flex-direction: column;
   display: flex;
   height: 100vh;
   background-color: lightblue;
