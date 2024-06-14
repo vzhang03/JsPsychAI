@@ -1,4 +1,43 @@
-:root {
+/* app formatting */
+
+.App {
+  display: flex;
+  flex-direction: row;
+  height: 100vh; 
+}
+
+.AIContainer {
+  background: yellow;
+  flex: 1;
+}
+
+.ExperimentContainer {
+  background: pink;
+  flex: 1;
+}
+
+.AIWindow {
+  display: flex;
+  height: 100vh;
+  background-color: lightgreen;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.ExperimentWindow {
+  display: flex;
+  height: 100vh;
+  background-color: lightblue;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+
+/* template formatting */
+
+/* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -65,4 +104,7 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-}
+} */
+
+
+
