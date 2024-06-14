@@ -17,6 +17,7 @@
 }
 
 .AIWindow {
+  flex-direction: column;
   display: flex;
   height: 100vh;
   background-color: lightgreen;
@@ -36,6 +37,10 @@
 }
 
 .script{
+  text-align: left;
+}
+
+.code-chunk{
   text-align: left;
 }
 

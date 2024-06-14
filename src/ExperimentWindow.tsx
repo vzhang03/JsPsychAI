@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useImperativeHandle, forwardRef } from "react";
 import RunExperimentComponent from "./components/RunExperimentComponent";
 
 const defaultScriptString = `
@@ -20,7 +20,7 @@ interface ExperimentWindowProps {
   code: any;
 }
 
-const ExperimentWindow: React.FC<ExperimentWindowProps> = ( {code} ) => {
+const ExperimentWindow = forwardRef(( { code }: ExperimentWindowProps, ref ) => {
   const [runExperiment, setRunExperiment] = useState(false); // code when running experiment
   const [scriptString, setScriptString] = useState<string>(defaultScriptString); // code when setting script screen
   const [codeChunks, setCodeChunks] = useState<string[]>([defaultScriptString]);
@@ -33,6 +33,12 @@ const ExperimentWindow: React.FC<ExperimentWindowProps> = ( {code} ) => {
       setSelectedChunkIndex(codeChunks.length); // Set the selected chunk index to the new chunk
     }
   }, [code]);
+
+  useImperativeHandle(ref, () => ({
+    getData() {
+      return codeChunks[selectedChunkIndex];
+    }
+  }));
 
   const handleButtonClick = () => {
     setRunExperiment(true);
@@ -77,6 +83,6 @@ const ExperimentWindow: React.FC<ExperimentWindowProps> = ( {code} ) => {
       )}
     </div>
   );
-};
+});
 
 export default ExperimentWindow;
